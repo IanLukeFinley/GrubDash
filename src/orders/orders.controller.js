@@ -4,7 +4,7 @@ const nextId = require("../utils/nextId");
 
 //Validation
 
-const orderExists = (req, res, next) => {
+function orderExists (req, res, next) {
    const orderId = req.params.orderId;
    res.locals.orderId = orderId;
    const foundOrder = orders.find((order) => order.id === orderId);
@@ -16,7 +16,7 @@ const orderExists = (req, res, next) => {
    res.locals.order = foundOrder;
 };
 
-const validDeliverTo = (req, res, next) => {
+function validDeliverTo (req, res, next) {
    const { data = null } = req.body;
    res.locals.newOD = data;
    const orderdeliverTo = data.deliverTo;
@@ -28,7 +28,7 @@ const validDeliverTo = (req, res, next) => {
    }
 };
 
-const validMobileNumber = (req, res, next) => {
+function validMobileNumber (req, res, next) {
    const orderMobileNumber = res.locals.newOD.mobileNumber;
    if (!orderMobileNumber || orderMobileNumber.length === 0) {
       return next({
@@ -38,7 +38,7 @@ const validMobileNumber = (req, res, next) => {
    }
 };
 
-const orderHasDishes = (req, res, next) => {
+function orderHasDishes (req, res, next) {
    const orderDishes = res.locals.newOD.dishes;
    if (!orderDishes || !Array.isArray(orderDishes) || orderDishes.length <= 0) {
       return next({
@@ -49,7 +49,7 @@ const orderHasDishes = (req, res, next) => {
    res.locals.dishes = orderDishes;
 };
 
-const validDishes = (req, res, next) => {
+function validDishes (req, res, next) {
    const orderDishes = res.locals.dishes;
    orderDishes.forEach((dish) => {
       const dishQuantity = dish.quantity;
@@ -64,7 +64,7 @@ const validDishes = (req, res, next) => {
    });
 };
 
-const orderIdMatches = (req, res, next) => {
+function orderIdMatches (req, res, next) {
    const paramId = res.locals.orderId;
    const { id = null } = res.locals.newOD;
    if (!id || id === null) {
@@ -77,7 +77,7 @@ const orderIdMatches = (req, res, next) => {
    }
 };
 
-const statusIsDelivered = (req, res, next) => {
+function statusIsDelivered (req, res, next) {
    const { status = null } = res.locals.newOD;
    if (!status || status.length === 0 || status === "invalid") {
       return next({
@@ -88,7 +88,7 @@ const statusIsDelivered = (req, res, next) => {
    }
 };
 
-const statusIsValid = (req, res, next) => {
+function statusIsValid (req, res, next) {
    const { status = null } = res.locals.order;
    if (status === "delivered") {
       return next({
@@ -98,7 +98,7 @@ const statusIsValid = (req, res, next) => {
    }
 };
 
-const statusIsPending = (req, res, next) => {
+function statusIsPending (req, res, next) {
    const { status = null } = res.locals.order;
    if (status !== "pending") {
       return next({

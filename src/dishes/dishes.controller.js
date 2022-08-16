@@ -8,7 +8,7 @@ const nextId = require("../utils/nextId");
 
 //Validation
 
-const dishExists = (req, res, next) => {
+function dishExists (req, res, next) {
    const dishId = req.params.dishId;
    res.locals.dishId = dishId;
    const foundDish = dishes.find((dish) => dish.id === dishId);
@@ -22,7 +22,7 @@ const dishExists = (req, res, next) => {
 
 
 
-const validName = (req, res, next) => {
+function validName (req, res, next) {
    const { data = null } = req.body;
    res.locals.newDD = data;
    const dishName = data.name;
@@ -34,7 +34,7 @@ const validName = (req, res, next) => {
    }
 };
 
-const validDescription = (req, res, next) => {
+function validDescription (req, res, next) {
    const dishDescription = res.locals.newDD.description;
    if (!dishDescription || dishDescription.length === 0) {
       return next({
@@ -44,7 +44,7 @@ const validDescription = (req, res, next) => {
    }
 };
 
-const validPrice = (req, res, next) => {
+function validPrice (req, res, next) {
    const dishPrice = res.locals.newDD.price;
    if (!dishPrice || typeof dishPrice != "number" || dishPrice <= 0) {
       return next({
@@ -54,7 +54,7 @@ const validPrice = (req, res, next) => {
    }
 };
 
-const validImage = (req, res, next) => {
+function validImage (req, res, next) {
    const dishImage = res.locals.newDD.image_url;
    if (!dishImage || dishImage.length === 0) {
       return next({
@@ -64,7 +64,7 @@ const validImage = (req, res, next) => {
    }
 };
 
-const dishIdMatches = (req, res, next) => {
+function dishIdMatches (req, res, next) {
    const paramId = res.locals.dishId;
    const { id = null } = res.locals.newDD;
    if (paramId != id && id) {
@@ -76,7 +76,7 @@ const dishIdMatches = (req, res, next) => {
 };
 
 //Validation Calls
-const createValidation = (req, res, next) => {
+function createValidation (req, res, next) {
    validName(req, res, next);
    validDescription(req, res, next);
    validPrice(req, res, next);
@@ -84,12 +84,12 @@ const createValidation = (req, res, next) => {
    next();
 };
 
-const readValidation = (req, res, next) => {
+function readValidation (req, res, next) {
    dishExists(req, res, next);
    next();
 };
 
-const updateValidation = (req, res, next) => {
+function updateValidation (req, res, next) {
    dishExists(req, res, next);
    validName(req, res, next);
    validDescription(req, res, next);
